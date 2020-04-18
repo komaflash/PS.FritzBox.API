@@ -1,12 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace PS.FritzBox.API.SOAP
@@ -34,7 +32,7 @@ namespace PS.FritzBox.API.SOAP
         /// <returns></returns>
         private string CreateEnvelope(SoapRequestParameters parameters)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             sb.Append(@"<?xml version='1.0' encoding='UTF-8'?> 
                       <soap:Envelope xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
                       xmlns:xsd='http://www.w3.org/2001/XMLSchema'
@@ -60,11 +58,11 @@ namespace PS.FritzBox.API.SOAP
         /// <returns></returns>
         private async Task<XDocument> ExecuteAsync(string xmlSOAP, Uri url, SoapRequestParameters parameters)
         {
-            HttpClientHandler handler = new HttpClientHandler();            
+            var handler = new HttpClientHandler();            
             handler.ServerCertificateCustomValidationCallback = delegate { return true; };
             handler.Credentials = parameters.Credentials;
 
-            using (HttpClient client = new HttpClient(handler))
+            using (var client = new HttpClient(handler))
             {
                // client.Timeout = TimeSpan.FromMilliseconds(parameters.Timeout);
                 var request = new HttpRequestMessage()
@@ -79,12 +77,12 @@ namespace PS.FritzBox.API.SOAP
                 request.Content.Headers.ContentType = new MediaTypeHeaderValue("text/xml");
                 request.Headers.Add("SOAPAction", $"{parameters.SoapAction}");
               
-                HttpResponseMessage response = await client.SendAsync(request);
+                var response = await client.SendAsync(request);
 
-                Stream stream = await response.Content.ReadAsStreamAsync();
+                var stream = await response.Content.ReadAsStreamAsync();
                 var sr = new StreamReader(stream);
 
-                XDocument soapResponse = XDocument.Load(sr); 
+                var soapResponse = XDocument.Load(sr); 
 
                 if(!response.IsSuccessStatusCode)
                 {
