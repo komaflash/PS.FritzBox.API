@@ -1,9 +1,6 @@
-﻿using PS.FritzBox.API;
-using PS.FritzBox.API.Base;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PS.FritzBox.API.CMD
@@ -92,12 +89,12 @@ namespace PS.FritzBox.API.CMD
         static void Configure(FritzDevice device)
         {
             ConnectionSettings settings = GetConnectionSettings();
-            device.GetServiceClient<DeviceInfoClient>(settings);
+            device.GetServiceClient<DeviceInfoClient>(settings).Wait();
             InitClientHandler(settings);
         }
 
         /// <summary>
-        /// Method to get the connections ettings
+        /// Method to get the connections settings
         /// </summary>
         /// <returns>the connection settings</returns>
         static ConnectionSettings GetConnectionSettings()
@@ -139,7 +136,5 @@ namespace PS.FritzBox.API.CMD
             _clientHandlers.Add("14", new WLANConfigurationClientHandler3(settings, printOutput, getInput, wait, clearOutput));
             _clientHandlers.Add("15", new WANDSLInterfaceConfigClientHandler(settings, printOutput, getInput, wait, clearOutput));
         }
-
-        
     }
 }

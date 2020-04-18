@@ -30,7 +30,7 @@ namespace PS.FritzBox.API.CMD
                 this.PrintOutputAction("7 - GenerateURLSID");
                 this.PrintOutputAction("8 - GetPersistentData");
                 this.PrintOutputAction("9 - SetPersistentData");
-               
+
                 this.PrintOutputAction("r - Return");
 
                 input = this.GetInputFunc();
@@ -52,7 +52,7 @@ namespace PS.FritzBox.API.CMD
                             await this.FinishConfiguration();
                             break;
                         case "5":
-                            await this.GetConfigFIle();
+                            await this.GetConfigFile();
                             break;
                         case "6":
                             await this.DownloadConfigFile();
@@ -83,7 +83,7 @@ namespace PS.FritzBox.API.CMD
                 }
 
             } while (input != "r");
-        }  
+        }
 
         /// <summary>
         /// Method to do a factory reset
@@ -113,7 +113,7 @@ namespace PS.FritzBox.API.CMD
             string result = this.GetInputFunc();
 
             if (result == "y")
-               await _client.RebootAsync();
+                await _client.RebootAsync();
             else
                 this.PrintOutputAction("Reboot aborted");
         }
@@ -145,11 +145,11 @@ namespace PS.FritzBox.API.CMD
             this.PrintOutputAction($"Configuration result: {result}");
         }
 
-        private async Task GetConfigFIle()
+        private async Task GetConfigFile()
         {
             this.ClearOutputAction();
             this.PrintEntry();
-            this.PrintOutputAction("Password: ");          
+            this.PrintOutputAction("Password: ");
             string result = await this._client.GetConfigFileAsync(this.GetInputFunc());
             this.PrintOutputAction($"Configfile: {result}");
         }
